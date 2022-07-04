@@ -18,9 +18,24 @@ Provide the following REST API:
 + Filter all courses without any students
 + Filter all students without any courses
 
-### Pre-requisitos
+### Pre-requirements
 * Java 11
 * Docker
+
+## Develop
+
+#### 1) Run the docker-compose image to get MySQL and Adminer up.
+
+    docker-compose -f src/main/docker/mysql.yml up
+
+## Run  💻
+
+## Deploy 📦
+
+## Doc 📖️
+
+## Test ✏️
+
 
 ### Frameworks/Tools
 * [Spring boot](https://spring.io/projects/spring-boot) - Framework de java

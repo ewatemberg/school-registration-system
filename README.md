@@ -24,9 +24,25 @@ Provide the following REST API:
 
 ## Develop
 
-#### 1) Run the docker-compose image to get MySQL and Adminer up.
+  1) Run the docker-compose image to get MySQL and Adminer up.
 
     docker-compose -f src/main/docker/mysql.yml up
+
+  2) Use the following access:
+
+    url: http://localhost:8083/
+    server: school-registration-mysql
+    user: root
+    pass: root
+    db: schooldb
+
+  3) Use flyway to restore the last version of DB domain
+
+    mvn flyway:clean flyway:migrate -Dflyway.schemas=schooldb -Dflyway.user=root -Dflyway.password=root
+
+  4) Run app
+
+    mvn spring-boot:run
 
 ## Run  💻
 

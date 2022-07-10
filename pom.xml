@@ -135,6 +135,10 @@
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>${flyway.version}</version>
+                <configuration>
+                    <url>jdbc:mysql://localhost:3307/schooldb</url>
+                    <user>root</user>
+                </configuration>
             </plugin>
         </plugins>
     </build>

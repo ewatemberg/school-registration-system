@@ -1,7 +1,6 @@
-CREATE TABLE `course`
+create table course
 (
-    `id`               bigint  NOT NULL AUTO_INCREMENT,
-    `name`             varchar(100) DEFAULT NOT NULL,
-    `maximum_capacity` TINYINT NOT NULL,
-    PRIMARY KEY (`id`)
+    id               bigint auto_increment primary key,
+    name             varchar(50) not null,
+    maximum_capacity varchar(50) not null
 );

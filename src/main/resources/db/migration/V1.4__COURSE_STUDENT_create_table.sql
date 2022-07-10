@@ -1,8 +1,8 @@
-CREATE TABLE `course_student`
+CREATE TABLE course_student
 (
-    `course_id`  bigint NOT NULL,
-    `student_id` bigint NOT NULL,
-    PRIMARY KEY (`course_id`, `student_id`),
-    CONSTRAINT `fk_course_id` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`),
-    CONSTRAINT `fk_student_id` FOREIGN KEY (`student_id`) REFERENCES `student` (`id`)
+    course_id  bigint not null,
+    student_id bigint not null,
+    primary key (`course_id`, `student_id`),
+    constraint fk_course_id foreign key (course_id) references course (id),
+    constraint fk_student_id foreign key (student_id) references student (id)
 );

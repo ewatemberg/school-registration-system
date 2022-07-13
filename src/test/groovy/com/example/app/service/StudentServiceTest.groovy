@@ -6,6 +6,7 @@ import com.example.app.exception.NotFoundException
 import com.example.app.mock.entity.StudentMock
 import com.example.app.repository.StudentRepository
 import com.example.app.service.dto.StudentDTO
+import com.example.app.service.dto.StudentPatchDTO
 import com.example.app.service.mapper.StudentMapper
 import com.example.app.service.mapper.StudentMapperImpl
 import org.spockframework.util.Assert
@@ -69,11 +70,11 @@ class StudentServiceTest extends BaseTests {
 
     def "When we call partial update student method with an id and we don't found then we receive NotFoundException"() {
         given: "Given an inexistant id"
-        StudentDTO studentDTO = studentMapper.toDto(new StudentMock().build())
-        studentDTO.setId(99L)
+        def id = 99L
+        def studentDTO = StudentPatchDTO.builder().firstName("Peter").build()
 
         when: "Call the partial update method"
-        def respuesta = studentService.partialUpdate(studentDTO)
+        def respuesta = studentService.partialUpdate(id, studentDTO)
 
         then: "We return an Option.empty"
         studentRepository.existsById(_) >> {

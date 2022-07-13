@@ -26,7 +26,7 @@ Provide the following REST API:
 
   1) Run the docker-compose image to get MySQL and Adminer up.
 
-    docker-compose -f src/main/docker/mysql.yml up
+    docker-compose -f src/main/docker/mysql.yml up -d
 
   2) Use the following access:
 
@@ -52,6 +52,47 @@ Provide the following REST API:
 
 ## Test ✏️
 
+For the development and execution of the tests, I used the Spock framework. In this [repo](https://github.com/ewatemberg/acceptance-test-spock) there is information about a training about its use and its virtues in the readability of the tests and understanding (mainly in the use of the Gherkin language).
+
+### Prepare the environment
+
+  1) Run the docker-compose image to get MySQL and Adminer up.
+
+    docker-compose -f src/main/docker/mysql.yml up -d
+
+  3) Create the schema **schooldb_test**
+
+  - You can use the following access to use adminer to manage the db from browser
+
+
+    url: http://localhost:8083/
+    server: school-registration-mysql
+    user: root
+    pass: root
+    db: schooldb
+
+  - Or you can use the following statement if you prefer use command line
+
+
+    docker exec -it docker exec -it docker_school-registration-mysql_1 bash -l
+    mysql -uroot -proot
+    CREATE SCHEMA schooldb_test; GO
+
+  3) Use flyway to restore the last version of DB domain
+
+    mvn flyway:clean flyway:migrate -Dflyway.schemas=schooldb_test -Dflyway.user=root -Dflyway.password=root
+
+  4) Run Test
+
+    mvn test
+
+### About TDD
+
+    
+
+### About ATDD
+
+In the src/test
 
 ### Frameworks/Tools
 * [Spring boot](https://spring.io/projects/spring-boot) - Framework de java

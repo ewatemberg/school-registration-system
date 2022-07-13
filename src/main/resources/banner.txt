@@ -1,0 +1,13 @@
+
+
+ .d8888b.  8888888b.   .d8888b.
+d88P  Y88b 888   Y88b d88P  Y88b
+Y88b.      888    888 Y88b.
+ "Y888b.   888   d88P  "Y888b.
+    "Y88b. 8888888P"      "Y88b.
+      "888 888 T88b         "888
+Y88b  d88P 888  T88b  Y88b  d88P
+ "Y8888P"  888   T88b  "Y8888P"
+
+${AnsiColor.BRIGHT_BLUE}:: School Registration System 🤓  :: Running Spring Boot ${spring-boot.version} ::
+:: https://github.com/ewatemberg/ ::${AnsiColor.DEFAULT}

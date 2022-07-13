@@ -1,5 +1,8 @@
 package com.example.app.service;
 
+import com.example.app.criteria.SearchRequest;
+import com.example.app.criteria.SearchSpecification;
+import com.example.app.domain.Course;
 import com.example.app.domain.Student;
 import com.example.app.enums.ErrorType;
 import com.example.app.exception.NotFoundException;
@@ -37,6 +40,15 @@ public class StudentService {
         Page<Student> students = studentRepository.findAll(pageable);
         return students.map(studentMapper::toDto);
     }
+
+    @Transactional(readOnly = true)
+    public Page<StudentDTO> search(SearchRequest searchRequest) {
+        log.debug("Request to search Student : {}", searchRequest);
+        SearchSpecification<Student> specification = new SearchSpecification<>(searchRequest);
+        Pageable pageable = SearchSpecification.getPageable(searchRequest.getPage(), searchRequest.getSize());
+        return studentRepository.findAll(specification, pageable).map(studentMapper::toDto);
+    }
+
 
     public StudentDTO partialUpdate(Long id, StudentPatchDTO studentDTO) {
         log.debug("Request to partially update Student : {}", studentDTO);

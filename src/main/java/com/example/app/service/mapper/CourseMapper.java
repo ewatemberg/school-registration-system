@@ -1,6 +1,8 @@
 package com.example.app.service.mapper;
 
+import com.example.app.domain.Course;
 import com.example.app.domain.Student;
+import com.example.app.service.dto.CourseDTO;
 import com.example.app.service.dto.StudentDTO;
 import com.example.app.service.dto.StudentPatchDTO;
 import org.mapstruct.BeanMapping;
@@ -11,25 +13,25 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 
 /**
- * Mapper for the entity Student and its DTO StudentDTO.
+ * Mapper for the entity Course and its DTO CourseDTO.
  */
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {CourseMapper.class})
-public interface StudentMapper extends EntityMapper<StudentDTO, Student> {
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {StudentMapper.class})
+public interface CourseMapper extends EntityMapper<CourseDTO, Course> {
 
-    StudentDTO toDto(Student student);
+    CourseDTO toDto(Course student);
 
-    Student toEntity(StudentDTO studentDTO);
+    Course toEntity(CourseDTO studentDTO);
 
     @Named("partialUpdate")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void partialUpdate(@MappingTarget Student student, StudentPatchDTO dto);
+    void partialUpdate(@MappingTarget Course student, CourseDTO dto);
 
-    default Student fromId(Long id) {
+    default Course fromId(Long id) {
         if (id == null) {
             return null;
         }
-        Student student = new Student();
-        student.setId(id);
-        return student;
+        Course course = new Course();
+        course.setId(id);
+        return course;
     }
 }

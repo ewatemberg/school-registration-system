@@ -18,6 +18,16 @@ Provide the following REST API:
 + Filter all courses without any students
 + Filter all students without any courses
 
+### API Specification
+[Swagger UI](http://localhost:8080/swagger-ui.html)
+
+[Specification](http://localhost:8080/v3/api-docs/)
+
+[](doc/img/swagger-ui.png)
+
+### Search Students/Courses
+
+
 ### Pre-requirements
 * Java 11
 * Docker

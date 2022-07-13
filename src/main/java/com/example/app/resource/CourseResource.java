@@ -5,7 +5,8 @@ import com.example.app.criteria.SearchRequest;
 import com.example.app.enums.ErrorType;
 import com.example.app.exception.ApiError;
 import com.example.app.exception.BadRequestException;
-import com.example.app.service.StudentService;
+import com.example.app.service.CourseService;
+import com.example.app.service.dto.CourseDTO;
 import com.example.app.service.dto.StudentDTO;
 import com.example.app.service.dto.StudentPatchDTO;
 import com.example.app.utils.Messages;
@@ -33,120 +34,100 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-@Tag(name = "Student", description = "operations associated to students")
+@Tag(name = "Courses", description = "operations associated to courses")
 @Slf4j
 @RestController
 @RequestMapping("/api")
-public class StudentResource {
+public class CourseResource {
 
-    public static final String PATH = "/students";
+    public static final String PATH = "/courses";
     public static final String PATH_ID = PATH + "/{id}";
     public static final String PATH_SEARCH = PATH + "/search";
 
     @Autowired
-    private StudentService studentService;
+    private CourseService courseService;
 
-    @Operation(summary = "Create a new Student")
+    @Operation(summary = "Create a new Course")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = Messages.RESOURCE_CREATED,
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = StudentDTO.class))}),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = CourseDTO.class))}),
             @ApiResponse(responseCode = "500", description = Messages.INTERNAL_ERROR,
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))})
     })
     @PostMapping(value = ApiVersion.V1 + PATH)
-    public ResponseEntity<StudentDTO> create(@Valid @RequestBody StudentDTO studentDTO) {
-        log.debug("REST request to save Student : {}", studentDTO);
-        if (studentDTO.getId() != null) {
+    public ResponseEntity<CourseDTO> create(@Valid @RequestBody CourseDTO courseDTO) {
+        log.debug("REST request to save Course : {}", courseDTO);
+        if (courseDTO.getId() != null) {
             throw new BadRequestException(ErrorType.BUSINESS, Messages.BAD_REQUEST_ID);
         }
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(studentService.save(studentDTO));
+                .body(courseService.save(courseDTO));
     }
 
-    @Operation(summary = "Update a student completely and if it doesn't exist it creates it")
+    @Operation(summary = "Update a course completely and if it doesn't exist it creates it")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = Messages.RESOURCE_UPDATED,
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = StudentDTO.class))}),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = CourseDTO.class))}),
             @ApiResponse(responseCode = "500", description = Messages.INTERNAL_ERROR,
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))})
     })
     @PutMapping(ApiVersion.V1 + PATH_ID)
-    public ResponseEntity<StudentDTO> update(
+    public ResponseEntity<CourseDTO> update(
             @PathVariable(value = "id") final Long id,
-            @RequestBody StudentDTO studentDTO) {
-        log.debug("REST request to update Student : {}", id);
+            @RequestBody CourseDTO courseDTO) {
+        log.debug("REST request to update Course : {}", id);
         return ResponseEntity
                 .ok()
-                .body(studentService.save(studentDTO));
+                .body(courseService.save(courseDTO));
     }
 
-
-    @Operation(summary = "Update partial update student")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = Messages.RESOURCE_UPDATED,
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = StudentPatchDTO.class))}),
-            @ApiResponse(responseCode = "500", description = Messages.INTERNAL_ERROR,
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))}),
-            @ApiResponse(responseCode = "404", description = Messages.RESOURCE_NOT_FOUND,
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))}),
-    })
-    @PatchMapping(value = ApiVersion.V1 + PATH_ID)
-    public ResponseEntity<StudentDTO> partialUpdate(
-            @PathVariable(value = "id") final Long id,
-            @RequestBody StudentPatchDTO studentDTO) {
-        log.debug("REST request to partial update Student partially : {}", id);
-        return ResponseEntity
-                .ok()
-                .body(studentService.partialUpdate(id, studentDTO));
-    }
-
-    @Operation(summary = "Get all Students with pagination and filters")
+    @Operation(summary = "Get all Courses with pagination and filters")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = Messages.OPERATION_SUCCESSFUL,
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = StudentDTO.class))}),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = CourseDTO.class))}),
             @ApiResponse(responseCode = "500", description = Messages.INTERNAL_ERROR,
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))})
     })
     @GetMapping(ApiVersion.V1 + PATH)
-    public ResponseEntity<Page<StudentDTO>> getAll(Pageable pageable) {
-        log.debug("REST request to get a page of Students");
-        return ResponseEntity.ok().body(studentService.findAll(pageable));
+    public ResponseEntity<Page<CourseDTO>> getAll(Pageable pageable) {
+        log.debug("REST request to get a page of Courses");
+        return ResponseEntity.ok().body(courseService.findAll(pageable));
     }
 
-    @Operation(summary = "Search Students by criteria")
+    @Operation(summary = "Search Courses by criteria")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = Messages.OPERATION_SUCCESSFUL,
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = StudentDTO.class))}),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = CourseDTO.class))}),
             @ApiResponse(responseCode = "500", description = Messages.INTERNAL_ERROR,
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))})
     })
     @PostMapping(ApiVersion.V1 + PATH_SEARCH)
-    public ResponseEntity<Page<StudentDTO>> search(@RequestBody SearchRequest searchRequest) {
-        log.debug("REST request to search Students by criteria");
-        return ResponseEntity.ok().body(studentService.search(searchRequest));
+    public ResponseEntity<Page<CourseDTO>> search(@RequestBody SearchRequest searchRequest) {
+        log.debug("REST request to search Courses by criteria");
+        return ResponseEntity.ok().body(courseService.search(searchRequest));
     }
 
-    @Operation(summary = "Get a Student by id")
+    @Operation(summary = "Get a Course by id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = Messages.OPERATION_SUCCESSFUL,
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = StudentDTO.class))}),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = CourseDTO.class))}),
             @ApiResponse(responseCode = "500", description = Messages.INTERNAL_ERROR,
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))}),
             @ApiResponse(responseCode = "404", description = Messages.RESOURCE_NOT_FOUND,
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))}),
     })
     @GetMapping(ApiVersion.V1 + PATH_ID)
-    public ResponseEntity<StudentDTO> get(@PathVariable Long id) {
-        log.debug("REST request to get Student : {}", id);
+    public ResponseEntity<CourseDTO> get(@PathVariable Long id) {
+        log.debug("REST request to get Course : {}", id);
         return ResponseEntity
                 .ok()
-                .body(studentService.findOne(id));
+                .body(courseService.findOne(id));
     }
 
-    @Operation(summary = "Delete a Student by id")
+    @Operation(summary = "Delete a Course by id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = Messages.RESOURCE_DELETED,
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = StudentDTO.class))}),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = CourseDTO.class))}),
             @ApiResponse(responseCode = "500", description = Messages.INTERNAL_ERROR,
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))}),
             @ApiResponse(responseCode = "404", description = Messages.RESOURCE_NOT_FOUND,
@@ -154,8 +135,8 @@ public class StudentResource {
     })
     @DeleteMapping(ApiVersion.V1 + PATH_ID)
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        log.debug("REST request to delete Student : {}", id);
-        studentService.delete(id);
+        log.debug("REST request to delete Course : {}", id);
+        courseService.delete(id);
         return ResponseEntity.noContent().build();
     }
 

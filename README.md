@@ -251,11 +251,11 @@ For the development and execution of the tests, I used the Spock framework. In t
 
 ### About TDD
 
-    
+You can find the **Unit Test** into **_src/test/groovy/com/example/app/_**     
 
 ### About ATDD
 
-In the src/test
+You can find the **Acceptance Test** into **_src/test/groovy/com/example/app/resource/atdd_**.
 
 ### Frameworks/Tools
 * [Spring boot](https://spring.io/projects/spring-boot) - Framework de java

@@ -26,13 +26,13 @@ Provide the following REST API:
 
 [Specification](http://localhost:8080/v3/api-docs/)
 
-[](doc/img/swagger-ui.png)
+![](doc/img/swagger-ui.png)
 
 ### Register student to course
 The project run with mock data. You can see all courses and all students calling fetchAll operation of API REST of each resource.
 To enroll student, must call the following operation:
 
-[](doc/img/enroll_student_operation.png)
+![](doc/img/enroll_student_operation.png)
 
 e.g
 ```json

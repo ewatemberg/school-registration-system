@@ -205,10 +205,13 @@ Filter courses by name not equal to CentOS and size 1 response
 
     mvn spring-boot:run
 
-## Run  💻
-
 ## Deploy 📦
 
+Run the docker-compose of app.
+
+    docker-compose -f src/main/docker/app.yml up -d
+
+Go to Specification API [Swagger UI](http://localhost:8080/swagger-ui.html)
 
 ## Test ✏️
 

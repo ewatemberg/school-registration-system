@@ -68,6 +68,13 @@ class AcceptanceSpecification extends Specification {
         buildMap(IntegrationTestRequestHelper.DELETE(mockMvc, "${IntegrationTestRequestHelper.PATH_STUDENT}/${id}"))
     }
 
+    Map doPostCourseWith(String body) {
+        buildMap(IntegrationTestRequestHelper.POST(mockMvc, IntegrationTestRequestHelper.PATH_COURSE, body))
+    }
+
+    Map doPutEnrollStudentToCourseWith(Long id, String body) {
+        buildMap(IntegrationTestRequestHelper.PUT(mockMvc, "${IntegrationTestRequestHelper.PATH_ENROLL_STUDENT_TO_COURSE}/${id}", body))
+    }
 
     private Map buildMap(def response) {
         def responseParsed = (response.contentAsString as String).isBlank() ? "" : jsonSlurper.parseText(response.contentAsString)

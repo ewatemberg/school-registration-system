@@ -5,8 +5,13 @@ import com.example.app.domain.Student
 import com.example.app.exception.NotFoundException
 import com.example.app.mock.entity.StudentMock
 import com.example.app.repository.StudentRepository
+import com.example.app.service.dto.FullStudentDTO
 import com.example.app.service.dto.StudentDTO
 import com.example.app.service.dto.StudentPatchDTO
+import com.example.app.service.mapper.CourseMapper
+import com.example.app.service.mapper.CourseMapperImpl
+import com.example.app.service.mapper.FullStudentMapper
+import com.example.app.service.mapper.FullStudentMapperImpl
 import com.example.app.service.mapper.StudentMapper
 import com.example.app.service.mapper.StudentMapperImpl
 import org.spockframework.util.Assert
@@ -29,6 +34,10 @@ class StudentServiceTest extends BaseTests {
     private StudentMapper studentMapper
     @Autowired
     private StudentRepository studentRepository
+    @Autowired
+    private FullStudentMapper fullStudentMapper
+    @Autowired
+    private CourseMapper courseMapper
 
     def setup() {
     }
@@ -113,7 +122,7 @@ class StudentServiceTest extends BaseTests {
         def pageFilter = new PageImpl<Student>(studentList);
 
         when: "Call the findAll method"
-        Page<Student> filterPage = studentService.findAll(pageable)
+        Page<FullStudentDTO> filterPage = studentService.findAll(pageable)
         def filters = filterPage.getContent();
 
         then: "We get the pages"
@@ -147,6 +156,16 @@ class StudentServiceTest extends BaseTests {
         @Bean
         StudentMapper studentMapper() {
             return new StudentMapperImpl()
+        }
+
+        @Bean
+        FullStudentMapper fullStudentMapper() {
+            return new FullStudentMapperImpl()
+        }
+
+        @Bean
+        CourseMapper courseMapper() {
+            return new CourseMapperImpl()
         }
 
         @Bean

@@ -1,11 +1,15 @@
 package com.example.app.service;
 
+import com.example.app.criteria.SearchRequest;
+import com.example.app.criteria.SearchSpecification;
 import com.example.app.domain.Student;
 import com.example.app.enums.ErrorType;
 import com.example.app.exception.NotFoundException;
 import com.example.app.repository.StudentRepository;
+import com.example.app.service.dto.FullStudentDTO;
 import com.example.app.service.dto.StudentDTO;
 import com.example.app.service.dto.StudentPatchDTO;
+import com.example.app.service.mapper.FullStudentMapper;
 import com.example.app.service.mapper.StudentMapper;
 import com.example.app.utils.Messages;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +29,9 @@ public class StudentService {
     @Autowired
     private StudentMapper studentMapper;
 
+    @Autowired
+    private FullStudentMapper fullStudentMapper;
+
     public StudentDTO save(StudentDTO newStudentDTO) {
         log.debug("Request to save the student : {}", newStudentDTO);
         Student savedStudent = studentRepository.save(studentMapper.toEntity(newStudentDTO));
@@ -32,11 +39,20 @@ public class StudentService {
     }
 
     @Transactional(readOnly = true)
-    public Page<StudentDTO> findAll(Pageable pageable) {
+    public Page<FullStudentDTO> findAll(Pageable pageable) {
         log.debug("Request to get all students");
         Page<Student> students = studentRepository.findAll(pageable);
-        return students.map(studentMapper::toDto);
+        return students.map(fullStudentMapper::toDto);
     }
+
+    @Transactional(readOnly = true)
+    public Page<FullStudentDTO> search(SearchRequest searchRequest) {
+        log.debug("Request to search Student : {}", searchRequest);
+        SearchSpecification<Student> specification = new SearchSpecification<>(searchRequest);
+        Pageable pageable = SearchSpecification.getPageable(searchRequest.getPage(), searchRequest.getSize());
+        return studentRepository.findAll(specification, pageable).map(fullStudentMapper::toDto);
+    }
+
 
     public StudentDTO partialUpdate(Long id, StudentPatchDTO studentDTO) {
         log.debug("Request to partially update Student : {}", studentDTO);

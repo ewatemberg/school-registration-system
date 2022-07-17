@@ -18,6 +18,144 @@ Provide the following REST API:
 + Filter all courses without any students
 + Filter all students without any courses
 
+
+## Doc 📖️
+
+### API Specification
+[Swagger UI](http://localhost:8080/swagger-ui.html)
+
+[Specification](http://localhost:8080/v3/api-docs/)
+
+[](doc/img/swagger-ui.png)
+
+### Search Specification
+
+**Searching Without Filter and Sorting**
+
+```json
+{
+    "filters": [],
+    "sorts": [],
+    "page": null,
+    "size": null
+}
+```
+
+If I mapping the operator translated to be a sql query like table below.
+
+| Operator | SQL Query |
+|---|---|
+| EQUAL | `SELECT * FROM table WHERE field = ?` |
+| NOT_EQUAL | `SELECT * FROM table WHERE field != ?` |
+| LIKE | `SELECT * FROM table WHERE field LIKE '%?%'` |
+| IN | `SELECT * FROM table WHERE field IN (?)` |
+| BETWEEN | `SELECT * FROM table WHERE field >= ? AND field <= ?` |
+
+If I mapping the sort direction translated to be a sql query like table below.
+
+| Direction | SQL Query |
+|---|---|
+| ASC | `SELECT * FROM table ORDER BY field ASC` |
+| DESC | `SELECT * FROM table ORDER BY field DESC` |
+
+
+**Filter by Name and Sort by Release Date ASC**
+
+Filter courses by name equal to Spanish
+
+```json
+{
+    "filters": [
+        {
+            "key": "name",
+            "operator": "EQUAL",
+            "field_type": "STRING",
+            "value": "Spanish"
+        }
+    ],
+    "sorts": [
+        {
+            "key": "name",
+            "direction": "ASC"
+        }
+    ],
+    "page": 0,
+    "size": 50
+}
+```
+
+Filter courses by name not equal to Spanish
+
+```json
+{
+    "filters": [
+        {
+            "key": "name",
+            "operator": "NOT_EQUAL",
+            "field_type": "STRING",
+            "value": "Spanish"
+        }
+    ],
+    "sorts": [
+        {
+            "key": "name",
+            "direction": "ASC"
+        }
+    ],
+    "page": 0,
+    "size": 50
+}
+```
+
+Filter courses by name not equal to CentOS and size 1 response
+
+```json
+{
+    "filters": [
+        {
+            "key": "name",
+            "operator": "NOT_EQUAL",
+            "field_type": "STRING",
+            "value": "Spanish"
+        }
+    ],
+    "sorts": [
+        {
+            "key": "name",
+            "direction": "ASC"
+        }
+    ],
+    "page": 0,
+    "size": 50
+}
+```
+
+**Filter courses by name like and sort by release data DESC**
+
+```json
+{
+    "filters": [
+        {
+            "key": "name",
+            "operator": "LIKE",
+            "field_type": "STRING",
+            "value": "S"
+        }
+    ],
+    "sorts": [
+        {
+            "key": "name",
+            "direction": "DESC"
+        }
+    ],
+    "page": 0,
+    "size": 50
+}
+```
+
+
+
+
 ### Pre-requirements
 * Java 11
 * Docker
@@ -48,7 +186,6 @@ Provide the following REST API:
 
 ## Deploy 📦
 
-## Doc 📖️
 
 ## Test ✏️
 
@@ -100,6 +237,7 @@ In the src/test
 * [Docker](https://www.docker.com/get-started/) - Containerized
 * [Flyway](https://flywaydb.org/) - Version control for your database
 * [Lombok](https://projectlombok.org/) 
+* [Example Filter JPA Specification](https://github.com/piinalpin/springboot-jpa-specification)
 
 
 ## Notes 📋

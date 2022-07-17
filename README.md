@@ -28,6 +28,29 @@ Provide the following REST API:
 
 [](doc/img/swagger-ui.png)
 
+### Register student to course
+The project run with mock data. You can see all courses and all students calling fetchAll operation of API REST of each resource.
+To enroll student, must call the following operation:
+
+[](doc/img/enroll_student_operation.png)
+
+e.g
+```json
+[
+  {
+    "first_name": "You firstname",
+    "last_name": "You lastname",
+    "email": "email@domain.com"
+  },
+  {
+    "id": 1,
+    "first_name": "John",
+    "last_name": "Wick",
+    "email": "johnwich@domain.com"
+  }
+]
+```
+
 ### Search Specification
 
 **Searching Without Filter and Sorting**

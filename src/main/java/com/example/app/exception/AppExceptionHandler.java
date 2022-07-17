@@ -27,6 +27,7 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler({Exception.class})
     public ResponseEntity<Object> handleGenericException(Exception e, HttpServletRequest request) {
         log.error("Generic exception message: {}, cause: {}", e.getLocalizedMessage(), e);
+        e.printStackTrace();
         return buildResponse(e.getLocalizedMessage(), HttpStatus.INTERNAL_SERVER_ERROR, e.getClass());
     }
 
@@ -40,6 +41,13 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
         log.error(ex.getLocalizedMessage());
         ApiError apiError = ex.getError();
         return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(MaxCapacityException.class)
+    public ResponseEntity<ApiError> handlerNotFoundException(MaxCapacityException ex) {
+        log.error(ex.getLocalizedMessage());
+        ApiError apiError = ex.getError();
+        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)

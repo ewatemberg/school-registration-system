@@ -7,8 +7,8 @@ import com.example.app.exception.ApiError;
 import com.example.app.exception.BadRequestException;
 import com.example.app.service.CourseService;
 import com.example.app.service.dto.CourseDTO;
+import com.example.app.service.dto.FullCourseDTO;
 import com.example.app.service.dto.StudentDTO;
-import com.example.app.service.dto.StudentPatchDTO;
 import com.example.app.utils.Messages;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -24,7 +24,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -33,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.Set;
 
 @Tag(name = "Courses", description = "operations associated to courses")
 @Slf4j
@@ -43,6 +43,7 @@ public class CourseResource {
     public static final String PATH = "/courses";
     public static final String PATH_ID = PATH + "/{id}";
     public static final String PATH_SEARCH = PATH + "/search";
+    public static final String PATH_REGISTER_COURSE = PATH + "/register-students-to-course" + "/{id}";
 
     @Autowired
     private CourseService courseService;
@@ -56,7 +57,7 @@ public class CourseResource {
     })
     @PostMapping(value = ApiVersion.V1 + PATH)
     public ResponseEntity<CourseDTO> create(@Valid @RequestBody CourseDTO courseDTO) {
-        log.debug("REST request to save Course : {}", courseDTO);
+        log.info("REST request to save Course : {}", courseDTO);
         if (courseDTO.getId() != null) {
             throw new BadRequestException(ErrorType.BUSINESS, Messages.BAD_REQUEST_ID);
         }
@@ -75,7 +76,7 @@ public class CourseResource {
     public ResponseEntity<CourseDTO> update(
             @PathVariable(value = "id") final Long id,
             @RequestBody CourseDTO courseDTO) {
-        log.debug("REST request to update Course : {}", id);
+        log.info("REST request to update Course : {}", id);
         return ResponseEntity
                 .ok()
                 .body(courseService.save(courseDTO));
@@ -89,8 +90,8 @@ public class CourseResource {
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))})
     })
     @GetMapping(ApiVersion.V1 + PATH)
-    public ResponseEntity<Page<CourseDTO>> getAll(Pageable pageable) {
-        log.debug("REST request to get a page of Courses");
+    public ResponseEntity<Page<FullCourseDTO>> getAll(Pageable pageable) {
+        log.info("REST request to get a page: {}, of Courses", pageable);
         return ResponseEntity.ok().body(courseService.findAll(pageable));
     }
 
@@ -102,8 +103,8 @@ public class CourseResource {
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))})
     })
     @PostMapping(ApiVersion.V1 + PATH_SEARCH)
-    public ResponseEntity<Page<CourseDTO>> search(@RequestBody SearchRequest searchRequest) {
-        log.debug("REST request to search Courses by criteria");
+    public ResponseEntity<Page<FullCourseDTO>> search(@RequestBody SearchRequest searchRequest) {
+        log.info("REST request to search Courses by criteria: {}", searchRequest);
         return ResponseEntity.ok().body(courseService.search(searchRequest));
     }
 
@@ -118,7 +119,7 @@ public class CourseResource {
     })
     @GetMapping(ApiVersion.V1 + PATH_ID)
     public ResponseEntity<CourseDTO> get(@PathVariable Long id) {
-        log.debug("REST request to get Course : {}", id);
+        log.info("REST request to get Course : {}", id);
         return ResponseEntity
                 .ok()
                 .body(courseService.findOne(id));
@@ -135,9 +136,26 @@ public class CourseResource {
     })
     @DeleteMapping(ApiVersion.V1 + PATH_ID)
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        log.debug("REST request to delete Course : {}", id);
+        log.info("REST request to delete Course id: {}", id);
         courseService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Register students to course")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = Messages.RESOURCE_UPDATED,
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = CourseDTO.class))}),
+            @ApiResponse(responseCode = "500", description = Messages.INTERNAL_ERROR,
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))}),
+            @ApiResponse(responseCode = "404", description = Messages.RESOURCE_NOT_FOUND,
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))})
+    })
+    @PutMapping(ApiVersion.V1 + PATH_REGISTER_COURSE)
+    public ResponseEntity<FullCourseDTO> registerStudentsToCourse(
+            @PathVariable(value = "id") final Long id,
+            @RequestBody Set<StudentDTO> studentDTOs) {
+        log.info("REST request to register the students: {} to Course id: {}", studentDTOs, id);
+        return ResponseEntity.ok().body(courseService.registerStudentToCourse(id, studentDTOs));
     }
 
 

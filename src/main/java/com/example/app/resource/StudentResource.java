@@ -6,6 +6,7 @@ import com.example.app.enums.ErrorType;
 import com.example.app.exception.ApiError;
 import com.example.app.exception.BadRequestException;
 import com.example.app.service.StudentService;
+import com.example.app.service.dto.FullStudentDTO;
 import com.example.app.service.dto.StudentDTO;
 import com.example.app.service.dto.StudentPatchDTO;
 import com.example.app.utils.Messages;
@@ -108,7 +109,7 @@ public class StudentResource {
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))})
     })
     @GetMapping(ApiVersion.V1 + PATH)
-    public ResponseEntity<Page<StudentDTO>> getAll(Pageable pageable) {
+    public ResponseEntity<Page<FullStudentDTO>> getAll(Pageable pageable) {
         log.debug("REST request to get a page of Students");
         return ResponseEntity.ok().body(studentService.findAll(pageable));
     }
@@ -121,7 +122,7 @@ public class StudentResource {
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))})
     })
     @PostMapping(ApiVersion.V1 + PATH_SEARCH)
-    public ResponseEntity<Page<StudentDTO>> search(@RequestBody SearchRequest searchRequest) {
+    public ResponseEntity<Page<FullStudentDTO>> search(@RequestBody SearchRequest searchRequest) {
         log.debug("REST request to search Students by criteria");
         return ResponseEntity.ok().body(studentService.search(searchRequest));
     }
